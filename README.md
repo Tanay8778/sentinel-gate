@@ -57,45 +57,6 @@ Open http://localhost:3000 in your browser to access the live dark-mode playgrou
 POST /api/triage
 Translates messy, unstructured incident alerts into verified, policy-safe execution payloads.
 
-Request:
-bash
-curl -X POST http://localhost:3000/api/triage \
-  -H "Content-Type: application/json" \
-  -d '{
-    "ticket": "URGENT: Primary Postgres replica cluster in us-east-1 went down with 500 error spikes. Transactions stalling. Need immediate pod restart!"
-  }'
-Response:
-json
-{
-  "success": true,
-  "data": {
-    "severity": "CRITICAL",
-    "category": "DATABASE",
-    "serviceName": "cache-layer",
-    "summary": "Cache latency spikes causing timeouts across edge workers",
-    "rootCause": "Memory exhaustion under elevated QPS load",
-    "action": "ALERT_ONCALL",
-    "canAutoExecute": false
-  },
-  "metrics": {
-    "totalTurns": 2,
-    "latencyMs": 842,
-    "recoveredViaSelfRepair": true
-  },
-  "trace": [
-    {
-      "turn": 1,
-      "stage": "SCHEMA_VALIDATION",
-      "passed": false,
-      "diagnostics": "• Schema Field \"category\": Invalid enum value. Expected 'DATABASE' | 'AUTH' | 'NETWORK' | 'INFRASTRUCTURE', received 'REDIS'"
-    },
-    {
-      "turn": 2,
-      "stage": "COMPLETED",
-      "passed": true
-    }
-  ]
-}
 🛠️ Tech Stack
 Language: TypeScript 5.7+ (Strict Null Checks, NodeNext resolution)
 Runtime: Node.js v20+ / Express 4.x
