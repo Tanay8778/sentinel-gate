@@ -15,32 +15,7 @@ When enterprise teams automate incident triage using LLMs (converting unstructur
 Traditional approaches either **throw unhandled 500 errors** (causing system downtime) or rely on **brittle regex string stripping** that breaks on minor token variations.
 **SentinelGate fixes this.** It acts as an intelligent proxy: instead of crashing when an AI slips up, it captures the exact type and policy diagnostics, feeds them back to the model in a second prompt, and lets the model **self-correct in real time**.
 ---
-## 🏛️ System Architecture
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Client as Inbound Alert / SRE
-    participant Gateway as Express Gateway (/api/triage)
-    participant Engine as Sentinel Repair Engine
-    participant LLM as Google Gemini 1.5 Flash
-    participant Validator as Zod + Policy Invariants
-    Client->>Gateway: POST /api/triage (Raw messy ticket)
-    Gateway->>Engine: triageTicket(rawTicket)
-    
-    rect rgb(30, 41, 59)
-        Engine->>LLM: Turn 1: System prompt + ticket
-        LLM-->>Engine: Raw JSON candidate
-        Engine->>Validator: Stage 1 (Zod) & Stage 2 (Policy) Check
-        alt Schema or Policy Violation
-            Validator-->>Engine: ❌ Validation Diagnostics
-            Engine->>LLM: Turn 2: "Feedback: Field 'category' invalid. Fix error."
-            LLM-->>Engine: Corrected payload candidate
-            Engine->>Validator: Verification Check
-        end
-        Validator-->>Engine: ✅ Passed all checks
-    end
-    Engine-->>Gateway: Verified Payload + Latency & Turn Trace
-    Gateway-->>Client: 200 OK { success: true, data, trace }
+
 ⚖️ Design Trade-offs & Engineering Decisions
 Multi-Turn Diagnostic Feedback Loop vs. Native Constrained Decoding
 A common question is: Why not simply use native JSON Schema constrained decoding (e.g. OpenAI JSON mode or Gemini responseSchema)?
