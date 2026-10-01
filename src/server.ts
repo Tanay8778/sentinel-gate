@@ -28,7 +28,17 @@ app.get("/api/health", (_req: Request, res: Response) => {
   });
 });
 
-// Main Triage API
+// Friendly GET handler if opened in browser URL bar
+app.get("/api/triage", (_req: Request, res: Response) => {
+  res.json({
+    message: "This is a POST endpoint. To use the web playground, visit http://localhost:" + PORT + " or send a POST request with { \"ticket\": \"...\" }",
+  });
+});
+
+// Favicon handler to avoid browser 404s
+app.get("/favicon.ico", (_req: Request, res: Response) => res.status(204).end());
+
+// Main Triage API (POST)
 app.post("/api/triage", async (req: Request, res: Response): Promise<void> => {
   const { ticket, maxTurns } = req.body;
 
