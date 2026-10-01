@@ -1,4 +1,4 @@
-﻿# 🛡️ SentinelGate: Type-Safe Autonomous Triage & Schema Self-Repair Gateway
+# 🛡️ SentinelGate: Type-Safe Autonomous Triage & Schema Self-Repair Gateway
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-v20+-green.svg?style=flat-square&logo=node.js)](https://nodejs.org/)
@@ -90,14 +90,12 @@ A common question is: *Why not simply use native JSON Schema constrained decodin
 git clone https://github.com/Tanay8778/sentinel-gate.git
 cd sentinel-gate
 npm install
-```
+2. Configure Environment (Optional)
+Copy .env.example to .env:
 
-### 2. Configure Environment (Optional)
-Copy `.env.example` to `.env`:
-```bash
+bash
 cp .env.example .env
-```
-> **Note:** If `GEMINI_API_KEY` is left blank, SentinelGate automatically boots in **Interactive Simulation Mode**, demonstrating the full self-repair loop deterministically without needing external API credentials!
+Note: If GEMINI_API_KEY is left blank, SentinelGate automatically boots in Interactive Simulation Mode, demonstrating the full self-repair loop deterministically without needing external API credentials!
 
 ### 3. Run the Automated Terminal Demo
 Run the CLI test harness to watch the self-repair loop catch errors and self-correct in real time:
@@ -111,11 +109,8 @@ npm run dev
 ```
 Open **`http://localhost:3000`** in your browser to access the live dark-mode playground.
 
----
-
-## 📡 API Reference
-
-### `POST /api/triage`
+📡 API Reference
+POST /api/triage
 Translates messy, unstructured incident alerts into verified, policy-safe execution payloads.
 
 #### Request:
