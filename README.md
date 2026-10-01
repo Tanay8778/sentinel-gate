@@ -25,37 +25,6 @@ Traditional approaches either **throw unhandled 500 errors** (causing system dow
 
 ---
 
-## 🏛️ System Architecture
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Client as Inbound Alert / SRE
-    participant Gateway as Express Gateway (/api/triage)
-    participant Engine as Sentinel Repair Engine
-    participant LLM as Google Gemini 1.5 Flash
-    participant Validator as Zod + Policy Invariants
-
-    Client->>Gateway: POST /api/triage (Raw messy ticket)
-    Gateway->>Engine: triageTicket(rawTicket)
-    
-    rect rgb(30, 41, 59)
-        Engine->>LLM: Turn 1: System prompt + ticket
-        LLM-->>Engine: Raw JSON candidate
-        Engine->>Validator: Stage 1 (Zod) & Stage 2 (Policy) Check
-        alt Schema or Policy Violation
-            Validator-->>Engine: ❌ Validation Diagnostics
-            Engine->>LLM: Turn 2: "Feedback: Field 'category' invalid. Fix error."
-            LLM-->>Engine: Corrected payload candidate
-            Engine->>Validator: Verification Check
-        end
-        Validator-->>Engine: ✅ Passed all checks
-    end
-
-    Engine-->>Gateway: Verified Payload + Latency & Turn Trace
-    Gateway-->>Client: 200 OK { success: true, data, trace }
-```
-
 ---
 
 ## ⚖️ Design Trade-offs & Engineering Decisions
